@@ -2,6 +2,12 @@ const TikaServer = require("tika-server");
 const rp = require('request-promise');
 const cheerio = require('cheerio');
 
+//liste de dictionnaire, avec 1 dico/ formation
+var list = new Map();
+
+//dico des valeurs des codes etc
+var values = new Map();
+
 
 // Lance le serveur Tika
 // Doc : https://www.npmjs.com/package/tika-server
@@ -24,10 +30,13 @@ ts.start().then(() => {
       // console.log("pdf", pdf);
       if(pdf) {
         return ts.queryText(pdf).then((data) => {
-          // console.log(data)
+           //console.log(data)
           let code = /CODE : ([^\n]*)/.exec(data)[1];
-          // console.log("Code :", code);
+           console.log("Code :", code);
+           values.set(code);
         });
+        list.set(values);
+        values={};
       }
     })
   }))
